@@ -7,6 +7,8 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -38,8 +40,13 @@ public class Estudiante implements Serializable {
     private String nombre;
     private String primerApellido;
     private String segundoApellido;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate fechaAlta;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate fechaNacimiento;
+    
     private Genero genero;
     private double beca;
  
