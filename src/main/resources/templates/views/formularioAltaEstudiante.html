@@ -45,7 +45,10 @@
             <option th:each="facultad : ${facultades}" th:value="${facultad.id}" 
             th:text="${facultad.nombre}"></option>
         </select>
-        
+        <label for="numerosTelefonos">Telefono(s): </label>
+        <!-- tiene q ser diferente de como se llama telefonos en clase estudiantes por eso ponemos numerosTelefonos -->
+        <input type="text" name="numerosTelefonos" id="numerosTelefonos" 
+                placeholder="Uno o varios separados por punto y coma ">
         <input type="submit" value="Alta">
 
 
@@ -60,6 +63,5 @@
         <input name="fechaNacimiento" type="date" id="fechaNacimiento">
         <input type="submit" value="Enviar">
  -->
- </form>
 </body>
 </html>
