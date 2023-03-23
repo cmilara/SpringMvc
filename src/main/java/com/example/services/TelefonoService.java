@@ -11,4 +11,8 @@ public interface TelefonoService {
     public void save (Telefono telefono);
     public void deleteById (int idTelefono);
     public void deleteByEstudiante(Estudiante estudiante);
+
+    //metodo que permite obtener estudiantes y sus telefonos
+
+    public List<Telefono>findByEstudiante(Estudiante estudiante);
 }

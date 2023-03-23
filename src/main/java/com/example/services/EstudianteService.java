@@ -12,6 +12,4 @@ public void save (Estudiante estudiante);
 public void deleteById (int idestudiante);
 public void delete (Estudiante estudiante);
 
-
-    
 }
