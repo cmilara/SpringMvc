@@ -46,20 +46,20 @@ public class Estudiante implements Serializable {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate fechaNacimiento;
-    
+
     private Genero genero;
     private double beca;
  
 
 
     // Relacionar unos estudiantes a una facultad
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     //asi creo la relacion externa
     @JoinColumn (name = "idFacultad")
 
     private Facultad facultad;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST, mappedBy = "estudiante")
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, mappedBy = "estudiante")
     private List <Telefono> telefonos;
 
 ;

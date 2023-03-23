@@ -34,7 +34,7 @@ public class Facultad implements Serializable{
 
     // creo la realacion de uno a muchos y para q sea bidireccional decimos quien posee la relacion de clave externa (mappedBy)
     //maneja la relacion el campo facultad de la parte de muchos, de los estudiantes
-    @OneToMany(fetch = FetchType.EAGER,
+    @OneToMany(fetch = FetchType.LAZY,
      cascade = CascadeType.PERSIST,mappedBy = "facultad")
     private List<Estudiante> estudiantes;
 
