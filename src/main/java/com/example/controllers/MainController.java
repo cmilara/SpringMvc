@@ -1,6 +1,7 @@
 package com.example.controllers;
 
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
@@ -83,50 +84,43 @@ public class MainController {
     @PostMapping("/altaModificacionEstudiante")
     public String altaEstudiante(@ModelAttribute Estudiante estudiante,
             @RequestParam("numerosTelefonos") String telefonosRecibidos,
-            @RequestParam(name="imagen") MultipartFile imagen){
+            @RequestParam(name = "imagen") MultipartFile imagen) {
 
         LOG.info("telefonos recibidos: " + telefonosRecibidos);
-    
-         if(!imagen.isEmpty()){
-            try {
 
-                //Ruta relativa dnd voy a almacenar el archivo de imagen
-                
-                java.nio.file.Path rutaRelativa = Paths.get("src/main/resources/static/images");// el path es un interfaz
-    
-                //Ruta absoluta es la concatenacion de la ruta relativa con el get...
-                String rutaAbsoluta = rutaRelativa.toFile().getAbsolutePath();
-                
-                //Almacenamos la imagen en un array de bytes
-                
-                byte[] imagenEnBytes = imagen.getBytes();
-                
-                //Ruta completa
-                
-                java.nio.file.Path rutaCompleta = Paths.get(rutaAbsoluta + "/" + imagen.getOriginalFilename());
-                
-                //Ahora tenemos que guardar la imagen en lel file system/rutaAbsoluta
-                
+        if (!imagen.isEmpty()) {
+            try {
+                // Ruta relativa dnd voy a almacenar el archivo de imagen
+                // Path rutaRelativa = Paths.get("src/main/resources/static/images");// forma 1, no 2
+
+                // Ruta absoluta es la concatenacion de la ruta relativa con el get...
+                // String rutaAbsoluta = rutaRelativa.toFile().getAbsolutePath();  // forma 1, no 2
+
+                String rutaAbsoluta = "//home//jalendem//Recursos"; // solo forma 2
+
+                // Almacenamos la imagen en un array de bytes
+                byte[] imagenEnBytes = imagen.getBytes(); 
+
+                // Ruta completa
+                Path rutaCompleta = Paths.get(rutaAbsoluta + "/" + imagen.getOriginalFilename());
+
+                // Ahora tenemos que guardar la imagen en lel file system/rutaAbsoluta
                 Files.write(rutaCompleta, imagenEnBytes);
-                
-                //Asociar la imagen con el objeto estudiante que se va a guardar
-                
+
+                // Asociar la imagen con el objeto estudiante que se va a guardar
                 estudiante.setFoto(imagen.getOriginalFilename());
-                
-                } catch (Exception e) {
-                
-                // TODO: handle exception
-                
-                }
-                
-                }
-         }        
+
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        }
+
         estudianteService.save(estudiante);
 
         // if(estudiante.getId() != 0){
-            //es una modificacion y borramos el estudiante
-            //y los telefonos correspondientes
-        //     estudianteService.deleteById(estudiante.getId());
+        // es una modificacion y borramos el estudiante
+        // y los telefonos correspondientes
+        // estudianteService.deleteById(estudiante.getId());
         // }
         List<String> listadoNumerosTelefonos = null;
 
@@ -138,7 +132,7 @@ public class MainController {
         }
         if (listadoNumerosTelefonos != null) {
             telefonoService.deleteByEstudiante(estudiante);
-      
+
             listadoNumerosTelefonos.stream().forEach(n -> {
                 Telefono telefonoObject = Telefono
                         .builder()
@@ -165,36 +159,38 @@ public class MainController {
         List<Telefono> telefonosDelEstudiante = TodosTelefonos.stream()
                 .filter(telefono -> telefono.getEstudiante().getId() == idEstudiante)
                 .collect(Collectors.toList());
-        
+
         String numerosDeTelefono = telefonosDelEstudiante.stream()
                 .map(telefono -> telefono.getNumero())
                 .collect(Collectors.joining(";"));
 
-        List <Facultad> facultades = facultadService.findAll();
+        List<Facultad> facultades = facultadService.findAll();
 
         model.addAttribute("estudiante", estudiante);
         model.addAttribute("telefonos", numerosDeTelefono);
-        model.addAttribute("facultades", facultades);        
+        model.addAttribute("facultades", facultades);
         return "views/formularioAltaEstudiante";
 
     }
+
     @GetMapping("/borrar/{id}")
-    public String borrarEstudiante(@PathVariable (name = "id") int idEstudiante){
+    public String borrarEstudiante(@PathVariable(name = "id") int idEstudiante) {
         estudianteService.deleteById(idEstudiante);
         return "redirect:/listar";
     }
 
-    //Metodo que te da los detalles del estudiante
+    // Metodo que te da los detalles del estudiante
     @GetMapping("/detalles/{id}")
-    public String estudianteDetails (@PathVariable (name = "id")int id, Model model){
-       Estudiante estudiante = estudianteService.findById(id);
-       List<Telefono> telefonos = telefonoService.findByEstudiante(estudiante);
-        List <String> numerosTelefono = telefonos.stream()
-            .map(t ->t.getNumero())
-            .toList();
+    public String estudianteDetails(@PathVariable(name = "id") int id, Model model) {
+        Estudiante estudiante = estudianteService.findById(id);
+        List<Telefono> telefonos = telefonoService.findByEstudiante(estudiante);
+        List<String> numerosTelefono = telefonos.stream()
+                .map(t -> t.getNumero())
+                .toList();
 
         model.addAttribute("telefonos", numerosTelefono);
         model.addAttribute("estudiante", estudiante);
 
         return "views/detalles";
+    }
 }
