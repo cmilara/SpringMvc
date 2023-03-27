@@ -9,12 +9,11 @@
 <body>
     <h1 th:text="'Detalles del estudiante ' + ${estudiante.nombre} + ' ' + ${estudiante.primerApellido}"></h1>
 
+    <img alt="Imagen de un perro" th:src="@{/images/}+${estudiante.foto}">
+
 <p>Telefonos:</p>
-
 <ul>
-
 <li th:each="telefono : ${telefonos}" th:text="${telefono}"></li>
-
 </ul>
 
 

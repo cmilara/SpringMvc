@@ -1,9 +1,9 @@
 package com.example.controllers;
 
-import java.lang.ProcessBuilder.Redirect;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 
 import com.example.entities.Estudiante;
 import com.example.entities.Facultad;
@@ -82,10 +82,45 @@ public class MainController {
      */
     @PostMapping("/altaModificacionEstudiante")
     public String altaEstudiante(@ModelAttribute Estudiante estudiante,
-            @RequestParam("numerosTelefonos") String telefonosRecibidos) {
+            @RequestParam("numerosTelefonos") String telefonosRecibidos,
+            @RequestParam(name="imagen") MultipartFile imagen){
 
         LOG.info("telefonos recibidos: " + telefonosRecibidos);
+    
+         if(!imagen.isEmpty()){
+            try {
 
+                //Ruta relativa dnd voy a almacenar el archivo de imagen
+                
+                java.nio.file.Path rutaRelativa = Paths.get("src/main/resources/static/images");// el path es un interfaz
+    
+                //Ruta absoluta es la concatenacion de la ruta relativa con el get...
+                String rutaAbsoluta = rutaRelativa.toFile().getAbsolutePath();
+                
+                //Almacenamos la imagen en un array de bytes
+                
+                byte[] imagenEnBytes = imagen.getBytes();
+                
+                //Ruta completa
+                
+                java.nio.file.Path rutaCompleta = Paths.get(rutaAbsoluta + "/" + imagen.getOriginalFilename());
+                
+                //Ahora tenemos que guardar la imagen en lel file system/rutaAbsoluta
+                
+                Files.write(rutaCompleta, imagenEnBytes);
+                
+                //Asociar la imagen con el objeto estudiante que se va a guardar
+                
+                estudiante.setFoto(imagen.getOriginalFilename());
+                
+                } catch (Exception e) {
+                
+                // TODO: handle exception
+                
+                }
+                
+                }
+         }        
         estudianteService.save(estudiante);
 
         // if(estudiante.getId() != 0){
@@ -116,7 +151,6 @@ public class MainController {
         }
 
         return "redirect:/listar";
-
     }
 
     /**
@@ -164,6 +198,3 @@ public class MainController {
 
         return "views/detalles";
 }
-
-}
-    

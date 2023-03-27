@@ -50,8 +50,8 @@ public class Estudiante implements Serializable {
     private Genero genero;
     private double beca;
  
-
-
+    private String foto;
+    
     // Relacionar unos estudiantes a una facultad
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     //asi creo la relacion externa
