@@ -12,8 +12,8 @@ public class ImagesConfigurer implements WebMvcConfigurer {
         WebMvcConfigurer.super.addResourceHandlers(registry);
 
         // doble asteristico significa q recursos estan en carperta recursos y todo lo q haya por debajo
-        registry.addResourceHandler("/resources/**")
-        .addResourceLocations("file:"+ "//home//jalendem//Recursos/");
+        registry.addResourceHandler("/recursos/**")
+        .addResourceLocations("file:"+ "/home/jalendem/recursos/");
     }
 
 }

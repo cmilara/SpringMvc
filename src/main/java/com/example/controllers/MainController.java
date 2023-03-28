@@ -96,7 +96,7 @@ public class MainController {
                 // Ruta absoluta es la concatenacion de la ruta relativa con el get...
                 // String rutaAbsoluta = rutaRelativa.toFile().getAbsolutePath();  // forma 1, no 2
 
-                String rutaAbsoluta = "//home//jalendem//Recursos"; // solo forma 2
+                String rutaAbsoluta = "/home/jalendem/recursos/images"; // solo forma 2
 
                 // Almacenamos la imagen en un array de bytes
                 byte[] imagenEnBytes = imagen.getBytes(); 
